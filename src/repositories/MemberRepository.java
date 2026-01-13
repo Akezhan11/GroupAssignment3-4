@@ -1,4 +1,9 @@
 package repositories;
+import entities.Member;
+import java.util.List;
 
-interface MemberRepository {
+public interface MemberRepository{
+    void save(Member member);
+    Member findById(String id);
+    List<Member> findAll();
 }

@@ -1,4 +1,4 @@
 package exception;
 
-public class BookingAlreadyExistsException {
+public class BookingAlreadyExistsException extends RuntimeException{
 }

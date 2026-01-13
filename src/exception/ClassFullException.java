@@ -1,4 +1,4 @@
 package exception;
 
-public class ClassFullException {
+public class ClassFullException extends RuntimeException{
 }

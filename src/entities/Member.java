@@ -1,6 +1,10 @@
 package entities;
 
-public abstract class Member {
+import repositories.MemberRepository;
+
+import java.io.Serializable;
+
+public abstract class Member implements MemberRepository {
     private int id;
     private static int idGen;
     private String name;

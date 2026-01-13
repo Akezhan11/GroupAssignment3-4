@@ -1,4 +1,4 @@
 package exception;
 
-public class MembershipExpiredException {
+public class MembershipExpiredException extends RuntimeException{
 }
