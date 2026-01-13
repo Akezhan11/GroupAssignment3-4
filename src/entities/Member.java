@@ -1,6 +1,6 @@
 package entities;
 
-public class Member {
+public abstract class Member {
     private int id;
     private static int idGen;
     private String name;
