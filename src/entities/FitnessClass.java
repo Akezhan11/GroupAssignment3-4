@@ -1,6 +1,6 @@
 package entities;
 
-public class FitnessClass {
+public abstract class FitnessClass {
     private String fitnessType;
     private String fitnessDescription;
     private String fitnessDate;
@@ -94,5 +94,16 @@ public class FitnessClass {
             throw new IllegalArgumentException("Fitness Trainer Surname cannot be empty");
         }
         this.fitnessTrainerSurname = fitnessTrainerSurname;
+    }
+
+
+    public abstract int calculateCurrentRoomPlace();
+    @Override
+    public String toString() {
+        return "Fitness type: " + fitnessType + "\n" +
+                "Fitness Description " + fitnessDescription + "\n" +
+                "Cost: " + fitnessCost + "\n" +
+                "Trainer" + fitnessTrainerName + " " + fitnessTrainerSurname + "\n" +
+                "date and time: "  + fitnessDate + " " + fitnessTime;
     }
 }
