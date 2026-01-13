@@ -1,6 +1,8 @@
 package entities;
 
 public abstract class FitnessClass {
+    private int id;
+    private static int idGen;
     private String fitnessType;
     private String fitnessDescription;
     private String fitnessDate;
@@ -10,6 +12,7 @@ public abstract class FitnessClass {
     private String fitnessTrainerSurname;
 
     public FitnessClass(String fitnessType, String fitnessDescription, String fitnessDate, String fitnessTime, int fitnessCost, String fitnessTrainerName, String fitnessTrainerSurname) {
+        this.id = idGen++;
         setFitnessType(fitnessType);
         setFitnessDescription(fitnessDescription);
         setFitnessDate(fitnessDate);
@@ -19,6 +22,12 @@ public abstract class FitnessClass {
         setFitnessTrainerSurname(fitnessTrainerSurname);
     }
 
+    public int getId(){
+        return id;
+    }
+    public void setId(int id){
+        this.id = id;
+    }
 
     public String getFitnessType() {
         return fitnessType;
@@ -97,10 +106,11 @@ public abstract class FitnessClass {
     }
 
 
-    public abstract int calculateCurrentRoomPlace();
+    public abstract void bookPlace();
     @Override
     public String toString() {
-        return "Fitness type: " + fitnessType + "\n" +
+        return "id:" + id + "\n" +
+                "Fitness type: " + fitnessType + "\n" +
                 "Fitness Description " + fitnessDescription + "\n" +
                 "Cost: " + fitnessCost + "\n" +
                 "Trainer" + fitnessTrainerName + " " + fitnessTrainerSurname + "\n" +
