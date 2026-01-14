@@ -7,14 +7,13 @@ public class MembershipType{
     private int day;
     private int month;
     private int year;
+    private int durationDays;
 
-    public MembershipType(String type, int cost, String description, int day, int month, int year) {
+    public MembershipType(String type, int cost, String description, int day, int month, int year, int durationDays) {
         setType(type);
         setCost(cost);
         setDescription(description);
-        setDay(day);
-        setMonth(month);
-        setYear(year);
+        setDurationDays(durationDays);
     }
     public String getType() {
         return type;
@@ -47,50 +46,19 @@ public class MembershipType{
         }
         this.description = description;
     }
-
-
-    public int getDay(){
-        return day;
+    public int getDurationDays(){
+        return durationDays;
     }
-    public void setDay(int day){
-        if(day < 0) {
-            throw new IllegalArgumentException("day cannot be negative");
-        } else if (day>31) {
-            throw new IllegalArgumentException("day cannot be greater than 31");
+    public void setDurationDays(int durationDays){
+        if(durationDays < 0) {
+            throw new IllegalArgumentException("durationDays cannot be negative");
         }
-        this.day = day;
-    }
-
-
-    public int getMonth(){
-        return month;
-    }
-    public void setMonth(int month){
-        if(month < 0) {
-            throw new IllegalArgumentException("month cannot be negative");
-        } else if (month>12) {
-            throw new IllegalArgumentException("month cannot be greater than 12");
-        }
-        this.month = month;
-    }
-
-
-    public int getYear(){
-        return year;
-    }
-    public void setYear(int year){
-        if (year < 0) {
-            throw new IllegalArgumentException("year cannot be negative");
-        }else if (year<2025) {
-            throw new IllegalArgumentException("year cannot be smaller than 2025");
-        }
-        this.year = year;
+        this.durationDays = durationDays;
     }
     @Override
     public String toString() {
         return "type: " + getType() + "\n"
                 + "Description: " + description + "\n"
-                + "cost of the membership" + cost + "Date of becoming our member: " +
-                day + "."+ month + "." + year;
+                + "cost of the membership" + cost;
     }
 }

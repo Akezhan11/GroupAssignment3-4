@@ -1,8 +1,7 @@
 package entities;
 
 import repositories.MemberRepository;
-
-import java.io.Serializable;
+import java.time.LocalDate;
 
 public abstract class Member implements MemberRepository {
     private int id;
@@ -12,6 +11,8 @@ public abstract class Member implements MemberRepository {
     private String phoneNumber;
     private String gender;
     private String email;
+    private MembershipType membershipType;
+    private LocalDate membershipEndDate;
 
     public Member(String name, String surname, String phoneNumber, String gender, String email) {
         this.id = idGen++;
@@ -20,6 +21,15 @@ public abstract class Member implements MemberRepository {
         setPhoneNumber(phoneNumber);
         setGender(gender);
         setEmail(email);
+    }
+    public void setMembership(MembershipType type) {
+        this.membershipType = type;
+        this.membershipEndDate = LocalDate.now()
+                .plusDays(type.getDurationDays());
+    }
+
+    public boolean isExpired() {
+        return membershipEndDate == null || membershipEndDate.isBefore(LocalDate.now());
     }
 
 
@@ -53,18 +63,11 @@ public abstract class Member implements MemberRepository {
     }
 
 
-    public String getPhoneNumber(){
+    public String getPhoneNumber() {
         return phoneNumber;
     }
-    public static boolean isValidPhone(String phone) {
-        if (phone == null) return false;
-        return phone.matches("\\+?\\d{10,13}");
-    }
 
-    public void setPhoneNumber(String phoneNumber){
-        if(!isValidPhone(phoneNumber)){
-            throw new IllegalArgumentException("Invalid phone number!");
-        }
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
