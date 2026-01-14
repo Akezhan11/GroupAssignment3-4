@@ -2,7 +2,7 @@ package entities;
 
 import repositories.FitnessClassRepository;
 
-public abstract class FitnessClass implements FitnessClassRepository {
+public abstract class FitnessClass{
     private int id;
     private static int idGen;
     private String fitnessType;

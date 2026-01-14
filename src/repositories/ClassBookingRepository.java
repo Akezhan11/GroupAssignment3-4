@@ -1,4 +1,8 @@
 package repositories;
+import java.util.List;
+import entities.ClassBooking;
 
-interface ClassBookingRepository {
+public interface ClassBookingRepository {
+    void save(ClassBooking classBooking);
+    List<ClassBooking> findAll();
 }
