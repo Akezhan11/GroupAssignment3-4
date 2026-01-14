@@ -90,6 +90,9 @@ public abstract class Member implements MemberRepository {
     }
     @Override
     public String toString(){
-        return "id: " + id + ", name: " + name + ", surname: " + surname + ", phone: " + phoneNumber + ", gender: " + gender + ", email: " + email;
+        return "id: " + id + ", name: " + name +
+                ", surname: " + surname + ", phone: " +
+                phoneNumber + ", gender: " + gender +
+                ", email: " + email;
     }
 }

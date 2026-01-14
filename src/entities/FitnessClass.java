@@ -1,6 +1,8 @@
 package entities;
 
-public abstract class FitnessClass {
+import repositories.FitnessClassRepository;
+
+public abstract class FitnessClass implements FitnessClassRepository {
     private int id;
     private static int idGen;
     private String fitnessType;

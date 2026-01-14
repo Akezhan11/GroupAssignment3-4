@@ -14,10 +14,33 @@ public class InMemoryMemberRepository implements MemberRepository{
     }
     @Override
     public Member findById(int id) {
-        return members.stream().filter(m-> m.getId() == id).findFirst().orElse(null);
+        for (Member m : members) {
+            if (m.getId() == id) {
+                return m;
+            }
+        }
+        return null;
     }
     @Override
     public List<Member> findAll(){
         return members;
+    }
+    @Override
+    public Member findByPhone(String phoneNumber) {
+        for (Member m : members) {
+            if(phoneNumber.equals(m.getPhoneNumber())){
+                return m;
+            }
+        }
+        return null;
+    }
+    @Override
+    public Member findByEmail(String email) {
+        for(Member m : members){
+            if(email.equals(m.getEmail())){
+                return m;
+            }
+        }
+        return null;
     }
 }

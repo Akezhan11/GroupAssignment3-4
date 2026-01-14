@@ -1,6 +1,6 @@
 package entities;
 
-public class MembershipType extends Member {
+public class MembershipType{
     private String type;
     private int cost;
     private String description;
@@ -8,8 +8,7 @@ public class MembershipType extends Member {
     private int month;
     private int year;
 
-    public MembershipType(String name, String surname, String phoneNumber, String gender, String email, String type, int cost, String description, int day, int month, int year) {
-        super(name,surname,phoneNumber,gender,email);
+    public MembershipType(String type, int cost, String description, int day, int month, int year) {
         setType(type);
         setCost(cost);
         setDescription(description);
@@ -89,8 +88,7 @@ public class MembershipType extends Member {
     }
     @Override
     public String toString() {
-        return "id:" + getId() + " name: " + getName() +
-                " surname: " + getSurname() + " type: " + getType() + "\n"
+        return "type: " + getType() + "\n"
                 + "Description: " + description + "\n"
                 + "cost of the membership" + cost + "Date of becoming our member: " +
                 day + "."+ month + "." + year;
