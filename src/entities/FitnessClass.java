@@ -2,7 +2,7 @@ package entities;
 
 import repositories.FitnessClassRepository;
 
-public abstract class FitnessClass{
+public class FitnessClass{
     private int id;
     private static int idGen;
     private String fitnessType;
@@ -12,8 +12,9 @@ public abstract class FitnessClass{
     private int fitnessCost;
     private String fitnessTrainerName;
     private String fitnessTrainerSurname;
+    private int maxPlaces;
 
-    public FitnessClass(String fitnessType, String fitnessDescription, String fitnessDate, String fitnessTime, int fitnessCost, String fitnessTrainerName, String fitnessTrainerSurname) {
+    public FitnessClass(String fitnessType, String fitnessDescription, String fitnessDate, String fitnessTime, int fitnessCost, String fitnessTrainerName, String fitnessTrainerSurname, int maxPlaces) {
         this.id = idGen++;
         setFitnessType(fitnessType);
         setFitnessDescription(fitnessDescription);
@@ -107,8 +108,16 @@ public abstract class FitnessClass{
         this.fitnessTrainerSurname = fitnessTrainerSurname;
     }
 
+    public int getMaxPlaces() {
+        return maxPlaces;
+    }
+    public void setMaxPlaces(int maxPlaces) {
+        if (maxPlaces <= 0) {
+            throw new IllegalArgumentException("Max place must be > 0");
+        }
+        this.maxPlaces = maxPlaces;
+    }
 
-    public abstract void bookPlace();
     @Override
     public String toString() {
         return "id:" + id + "\n" +

@@ -1,6 +1,7 @@
 package service;
 
 import entities.ClassBooking;
+import entities.FitnessClass;
 import entities.Member;
 import exception.BookingAlreadyExistsException;
 import exception.ClassFullException;
@@ -12,15 +13,20 @@ public class BookingService {
     public BookingService(ClassBookingRepository bookingRepository) {
         this.bookingRepository = bookingRepository;
     }
-    public void bookClass(Member member, ClassBooking booking){
+    public void bookClass(Member member, FitnessClass fitnessClass){
+
         if (member.isExpired()) throw new MembershipExpiredException();
-        if (!booking.hasFreePlaces()) throw new ClassFullException();
-        for (ClassBooking b : bookingRepository.findAll()) {
-            if (b.equals(booking)) {
-                throw new BookingAlreadyExistsException();
-            }
+        if (bookingRepository.exists(member.getId(), fitnessClass.getId())) {
+            throw new BookingAlreadyExistsException();
         }
-        booking.bookPlace();
+        int bookedCount =
+                bookingRepository.countByFitnessClassId(fitnessClass.getId());
+
+        if (bookedCount >= fitnessClass.getMaxPlaces()){
+            throw new ClassFullException();
+        }
+        ClassBooking booking = new ClassBooking(member, fitnessClass);
+
         bookingRepository.save(booking);
     }
 }
