@@ -1,4 +1,4 @@
-package repositories.implementations;
+/*package repositories.implementations;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -52,3 +52,4 @@ public class InMemoryFitnessClassRepository implements FitnessClassRepository {
         return null;
     }
 }
+*/

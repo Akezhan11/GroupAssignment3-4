@@ -1,10 +1,9 @@
-package repositories.implementations;
+/*package repositories.implementations;
 
 import entities.Member;
 import repositories.MemberRepository;
 import java.util.ArrayList;
 import java.util.List;
-
 public class InMemoryMemberRepository implements MemberRepository{
     private List<Member> members = new ArrayList<>();
 
@@ -44,3 +43,4 @@ public class InMemoryMemberRepository implements MemberRepository{
         return null;
     }
 }
+*/

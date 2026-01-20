@@ -3,7 +3,7 @@ package entities;
 import repositories.MemberRepository;
 import java.time.LocalDate;
 
-public abstract class Member implements MemberRepository {
+public class Member {
     private int id;
     private static int idGen;
     private String name;

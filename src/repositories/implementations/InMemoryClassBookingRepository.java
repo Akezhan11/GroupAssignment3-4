@@ -1,4 +1,4 @@
-package repositories.implementations;
+/*package repositories.implementations;
 import java.util.List;
 import java.util.ArrayList;
 import repositories.ClassBookingRepository;
@@ -14,3 +14,4 @@ public class InMemoryClassBookingRepository implements ClassBookingRepository {
         return bookings;
     }
 }
+*/
