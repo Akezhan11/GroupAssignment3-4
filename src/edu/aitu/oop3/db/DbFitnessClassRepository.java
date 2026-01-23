@@ -59,7 +59,18 @@ public class DbFitnessClassRepository implements FitnessClassRepository{
     }
     @Override
     public FitnessClass findByType(String fitnessType){
-
+        String sql = """
+                SEELECT * FROM fitness WHERE id = ?;
+                """;
+        try(Connection con = DatabaseConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)){
+            ps.setInt(1,id);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                String type
+            }
+        }catch(Exception e){
+            throw new RuntimeException("Error finding fitness class by id " +id, e);
+        }
     }
     @Override
     public FitnessClass findByTrainerName(String fitnessTrainerName){

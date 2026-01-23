@@ -42,8 +42,7 @@ public class DataBaseCreation {
                 create table if not exists booking(
                 id SERIAL PRIMARY KEY,
                 member_id REFERENCES members(id),
-                class_id REFERENCES classes(id),
-                booked_places INT,
+                class_id REFERENCES fitness(id),
                 booking_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 );
                 """;

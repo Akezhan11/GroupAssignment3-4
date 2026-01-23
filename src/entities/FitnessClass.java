@@ -13,6 +13,7 @@ public class FitnessClass{
     private String fitnessTrainerName;
     private String fitnessTrainerSurname;
     private int maxPlaces;
+    public FitnessClass(){}
 
     public FitnessClass(String fitnessType, String fitnessDescription, String fitnessDate, String fitnessTime, int fitnessCost, String fitnessTrainerName, String fitnessTrainerSurname, int maxPlaces) {
         this.id = idGen++;

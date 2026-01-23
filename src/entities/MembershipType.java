@@ -4,9 +4,7 @@ public class MembershipType{
     private String type;
     private int cost;
     private String description;
-    private int day;
-    private int month;
-    private int year;
+
     private int durationDays;
 
     public MembershipType(String type, int cost, String description, int day, int month, int year, int durationDays) {

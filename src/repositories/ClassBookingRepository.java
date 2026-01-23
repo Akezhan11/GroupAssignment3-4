@@ -7,4 +7,7 @@ public interface ClassBookingRepository {
     boolean exists(int memberId, int fitnessClassId);
     int countByFitnessClassId(int fitnessClassId);
     List<ClassBooking> findAll();
+    void delete(ClassBooking classBooking);
+    ClassBooking findByClassId(int id);
+    ClassBooking findByMemberid(int memberId);
 }

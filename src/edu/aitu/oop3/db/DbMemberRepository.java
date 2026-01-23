@@ -33,7 +33,7 @@ public class DbMemberRepository implements MemberRepository{
                 """;
         try (Connection con = DatabaseConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
-                ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 String name = rs.getString("name");
                 String surname = rs.getString("surname");

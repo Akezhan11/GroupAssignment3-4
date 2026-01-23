@@ -13,6 +13,7 @@ public class Member {
     private String email;
     private MembershipType membershipType;
     private LocalDate membershipEndDate;
+    public Member(){}
 
     public Member(String name, String surname, String phoneNumber, String gender, String email) {
         this.id = idGen++;
