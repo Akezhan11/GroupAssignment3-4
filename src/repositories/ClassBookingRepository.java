@@ -8,6 +8,6 @@ public interface ClassBookingRepository {
     int countByFitnessClassId(int fitnessClassId);
     List<ClassBooking> findAll();
     void delete(ClassBooking classBooking);
-    ClassBooking findByClassId(int id);
+    List<ClassBooking> findByClassId(int fitnessClassId);
     List<ClassBooking> findByMemberId(int memberId);
 }

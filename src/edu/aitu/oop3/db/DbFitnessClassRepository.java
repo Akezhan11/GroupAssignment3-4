@@ -1,15 +1,14 @@
 package edu.aitu.oop3.db;
 
 
-import entities.ClassBooking;
+
 import entities.FitnessClass;
-import entities.Member;
 import repositories.FitnessClassRepository;
 
-import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,15 +41,7 @@ public class DbFitnessClassRepository implements FitnessClassRepository{
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                String type = rs.getString("type");
-                String description = rs.getString("description");
-                String date = rs.getString("date");
-                String time = rs.getString("time");
-                int cost = rs.getInt("cost");
-                String name = rs.getString("trainer_first_name");
-                String surname = rs.getString("trainer_last_name");
-                int maxPlace = rs.getInt("max_places");
-                return new FitnessClass(type,description,date,time,cost,name,surname,maxPlace);
+                return fitnessclassdesc(rs);
             }
             return null;
         } catch (Exception e) {
@@ -60,28 +51,99 @@ public class DbFitnessClassRepository implements FitnessClassRepository{
     @Override
     public FitnessClass findByType(String fitnessType){
         String sql = """
-                SEELECT * FROM fitness WHERE id = ?;
+                SELECT * FROM fitness WHERE type=?;
                 """;
         try(Connection con = DatabaseConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)){
-            ps.setInt(1,id);
+            ps.setString(1,fitnessType);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                String type
+                return fitnessclassdesc(rs);
             }
+            return null;
         }catch(Exception e){
-            throw new RuntimeException("Error finding fitness class by id " +id, e);
+            throw new RuntimeException("Error finding fitness class by type " +fitnessType, e);
         }
     }
     @Override
-    public FitnessClass findByTrainerName(String fitnessTrainerName){
+    public List<FitnessClass> findByTrainerName(String trainerName, String trainerSurname) {
 
+        List<FitnessClass> classes = new ArrayList<>();
+
+        String sql = """
+        SELECT * FROM fitness WHERE trainer_first_name = ? AND trainer_last_name = ?
+        """;
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, trainerName);
+            ps.setString(2, trainerSurname);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                FitnessClass fc = fitnessclassdesc(rs);
+                classes.add(fc);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding classes by trainer", e);
+        }
+
+        return classes;
     }
-    @Override
-    public FitnessClass findByCost(int fitnessCost){
 
+    @Override
+    public List<FitnessClass> findByCost(int cost) {
+
+        List<FitnessClass> classes = new ArrayList<>();
+
+        String sql = """
+        SELECT * FROM fitness WHERE cost = ?
+        """;
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, cost);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                classes.add(fitnessclassdesc(rs));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding classes by cost", e);
+        }
+
+        return classes;
     }
-    @Override
-    public  List<FitnessClass> findAll(){
 
+    @Override
+    public List<FitnessClass> findAll() {
+        List<FitnessClass> classes = new ArrayList<>();
+        String sql = "SELECT * FROM fitness";
+
+        try (Connection con = DatabaseConnection.getConnection();ResultSet rs = con.createStatement().executeQuery(sql)) {
+
+            while (rs.next()) {
+                classes.add(fitnessclassdesc(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding all fitness classes", e);
+        }
+        return classes;
+    }
+    private FitnessClass fitnessclassdesc(ResultSet rs) throws SQLException {
+        FitnessClass fc = new FitnessClass();
+        fc.setId(rs.getInt("id"));
+        fc.setFitnessType(rs.getString("type"));
+        fc.setFitnessDescription(rs.getString("description"));
+        fc.setFitnessDate(rs.getString("date"));
+        fc.setFitnessTime(rs.getString("time"));
+        fc.setFitnessCost(rs.getInt("cost"));
+        fc.setFitnessTrainerName(rs.getString("trainer_first_name"));
+        fc.setFitnessTrainerSurname(rs.getString("trainer_last_name"));
+        fc.setMaxPlaces(rs.getInt("max_places"));
+        return fc;
     }
 }

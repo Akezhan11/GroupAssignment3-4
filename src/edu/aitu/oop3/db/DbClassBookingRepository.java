@@ -69,29 +69,48 @@ public class DbClassBookingRepository implements ClassBookingRepository{
         }
     }
     @Override
-    public ClassBooking findByClassId(int id){
-        String sql= """
-                Select * from booking WHERE class_id =? ;
-                """;
-        try(Connection con = DatabaseConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1,id);
+    public List<ClassBooking> findByClassId(int fitnessClassId) {
+        List<ClassBooking> bookings = new ArrayList<>();
+        String sql = """
+        SELECT
+            b.id AS booking_id,
+            m.id AS member_id,
+            m.name AS member_name,
+            f.id AS class_id,
+            f.type AS class_type,
+            f.max_places AS max_places
+        FROM booking b
+        JOIN members m ON b.member_id = m.id
+        JOIN fitness f ON b.class_id = f.id
+        WHERE f.id = ?
+    """;
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, fitnessClassId);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
+
+            while (rs.next()) {
+
                 Member member = new Member();
                 member.setId(rs.getInt("member_id"));
+                member.setName(rs.getString("member_name"));
 
                 FitnessClass fitnessClass = new FitnessClass();
                 fitnessClass.setId(rs.getInt("class_id"));
+                fitnessClass.setFitnessType(rs.getString("class_type"));
+                fitnessClass.setMaxPlaces(rs.getInt("max_places"));
 
-                return new ClassBooking(member, fitnessClass);
+                bookings.add(new ClassBooking(member, fitnessClass));
             }
-            return null;
-        }catch(SQLException e){
-            throw new RuntimeException("Error finding booking place " ,e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding bookings by fitness class id", e);
         }
+        return bookings;
     }
+
     @Override
-public List<ClassBooking> findByMemberId(int memberId) {
+    public List<ClassBooking> findByMemberId(int memberId) {
 
     List<ClassBooking> bookings = new ArrayList<>();
 

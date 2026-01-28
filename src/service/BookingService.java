@@ -45,6 +45,9 @@ public class BookingService {
         return bookingRepository.findAll();
     }
     public List<ClassBooking> getBookingsByMember(int memberId) {
-        return bookingRepository.findByMemberid(memberId);
+        return bookingRepository.findByMemberId(memberId);
+    }
+    public List<ClassBooking> getBookingsByFitness(int fitnessClassId) {
+        return bookingRepository.findByClassId(fitnessClassId);
     }
 }
