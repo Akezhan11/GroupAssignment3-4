@@ -9,5 +9,5 @@ public interface ClassBookingRepository {
     List<ClassBooking> findAll();
     void delete(ClassBooking classBooking);
     ClassBooking findByClassId(int id);
-    ClassBooking findByMemberid(int memberId);
+    List<ClassBooking> findByMemberId(int memberId);
 }
