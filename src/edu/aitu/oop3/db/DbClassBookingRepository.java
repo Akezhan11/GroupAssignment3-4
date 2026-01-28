@@ -91,26 +91,50 @@ public class DbClassBookingRepository implements ClassBookingRepository{
         }
     }
     @Override
-    public ClassBooking findByMemberid(int memberId){
-        String sql = """
-                SELECT member_id, class_id FROM booking WHERE member_id =? ;
-                """;
-        try(Connection con = DatabaseConnection.getConnection();PreparedStatement ps = con.prepareStatement(sql)){
-            ps.setInt(1,memberId);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                Member member = new Member();
-                member.setId(rs.getInt("member_id"));
-                FitnessClass fitnessClass = new FitnessClass();
-                fitnessClass.setId(rs.getInt("class_id"));
+public List<ClassBooking> findByMemberId(int memberId) {
 
-                return new ClassBooking(member, fitnessClass);
-            }
-            return null;
-        }catch (SQLException e){
-            throw new RuntimeException("Error finding member id " ,e);
+    List<ClassBooking> bookings = new ArrayList<>();
+
+    String sql = """
+        SELECT
+            b.id AS booking_id,
+            m.id AS member_id,
+            m.name AS member_name,
+            f.id AS class_id,
+            f.type AS class_type,
+            f.max_places AS max_places
+        FROM booking b
+        JOIN members m ON b.member_id = m.id
+        JOIN fitness f ON b.class_id = f.id
+        WHERE m.id = ?
+    """;
+
+    try (Connection con = DatabaseConnection.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setInt(1, memberId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+
+            Member member = new Member();
+            member.setId(rs.getInt("member_id"));
+            member.setName(rs.getString("member_name"));
+
+            FitnessClass fitnessClass = new FitnessClass();
+            fitnessClass.setId(rs.getInt("class_id"));
+            fitnessClass.setFitnessType(rs.getString("class_type"));
+            fitnessClass.setMaxPlaces(rs.getInt("max_places"));
+
+            bookings.add(new ClassBooking(member, fitnessClass));
         }
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Error finding bookings by member id", e);
     }
+
+    return bookings;
+}
     @Override
     public List<ClassBooking> findAll() {
         List<ClassBooking> bookings = new ArrayList<>();
