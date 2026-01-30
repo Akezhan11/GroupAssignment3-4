@@ -33,4 +33,37 @@ public class MembershipService {
             throw new MembershipExpiredException();
         }
     }
+    public void update(int memberId, String newType, int days) {
+
+        MembershipType membership = membershipRepository.findByMemberId(memberId);
+
+        if (membership == null) {
+            throw new RuntimeException("Membership not found");
+        }
+
+        membership.setType(newType);
+        membership.setStartDate(LocalDate.now());
+        membership.setEndDate(LocalDate.now().plusDays(days));
+        membership.setActive(true);
+
+        membershipRepository.update(membership);
+    }
+
+    public void findByMemberId(int memberId){
+        MembershipType membership = membershipRepository.findByMemberId(memberId);
+
+        if (membership == null) {
+            throw new RuntimeException("Membership not found");
+        }
+    }
+    public void deactivate(int memberId) {
+
+        MembershipType membership = membershipRepository.findByMemberId(memberId);
+
+        if (membership == null) {
+            throw new RuntimeException("Membership not found");
+        }
+
+        membershipRepository.deactivate(memberId);
+    }
 }

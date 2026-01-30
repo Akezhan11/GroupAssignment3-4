@@ -6,6 +6,7 @@ import repositories.MemberRepository;
 import service.BookingService;
 import service.FitnessClassService;
 import service.MemberService;
+import service.MembershipService;
 
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
@@ -20,11 +21,12 @@ public class Main {
         DbFitnessClassRepository fitnessRepo = new DbFitnessClassRepository();
         DbClassBookingRepository bookingRepo = new DbClassBookingRepository();
         DbMemberRepository memberRepo = new DbMemberRepository();
+        DbMembershipRepository membershipRepo = new DbMembershipRepository();
 
         FitnessClassService fitnessService = new FitnessClassService(fitnessRepo);
         BookingService bookingService = new BookingService(bookingRepo);
         MemberService memberService = new MemberService(memberRepo);
-
+        MembershipService membershipService = new MembershipService(membershipRepo);
         Member member = new Member();
         while (true){
             System.out.println("Fitness application");
@@ -151,15 +153,46 @@ public class Main {
                     }
                 }
                 case 2 -> {
-                    System.out.println("Membership types:");
-                    System.out.println("1: Basic");
-                    System.out.println("2: Premium");
-                    System.out.println("3: Platinum");
+                    System.out.println("1: Buy membership");
+                    System.out.println("2: Check if membership is active");
+                    System.out.println("3: Deactivate membership");
+                    System.out.println("4: Update membership");
+                    System.out.println("5: Find memberships by member id");
+                    System.out.println("6: Exit");
                     System.out.print("Enter your choice: ");
                     int choice3 = sc.nextInt();
                     sc.nextLine();
                     switch(choice3){
-
+                        case 1->{
+                            System.out.println("Enter member id: ");
+                            int id = sc.nextInt();
+                            System.out.println("Enter type: ");
+                            String  type = sc.nextLine();
+                            System.out.println("Enter days: ");
+                            int days = sc.nextInt();
+                            membershipService.buyMembership(id,type, days);
+                        }case 2->{
+                            System.out.println("Enter member id: ");
+                            membershipService.checkActive(sc.nextInt());
+                        }case 3->{
+                            System.out.println("Enter member id: ");
+                            membershipService.deactivate(sc.nextInt());
+                        }case 4 -> {
+                            System.out.print("Enter member ID: ");
+                            int memberId = sc.nextInt();
+                            sc.nextLine();
+                            System.out.print("Enter new membership type: ");
+                            String type = sc.nextLine();
+                            System.out.print("Enter duration (days): ");
+                            int days = sc.nextInt();
+                            membershipService.update(memberId, type, days);
+                        }
+                        case 5->{
+                            System.out.print("Enter member id: ");
+                            membershipService.findByMemberId(sc.nextInt());
+                        }case 6 ->{
+                            return;
+                        }default -> System.out.println("Unknown choice");
                     }
                 }
                 case 3 -> {
@@ -168,10 +201,9 @@ public class Main {
                     System.out.println("3: Find member by id");
                     System.out.println("4: Find member by email");
                     System.out.println("5: Find member by phone");
-                    System.out.println("6: Find all members by membership type");
-                    System.out.println("7: Update member");
-                    System.out.println("8: Get bookings by member id");
-                    System.out.println("9: Exit");
+                    System.out.println("6: Update member");
+                    System.out.println("7: Get bookings by member id");
+                    System.out.println("8: Exit");
                     System.out.print("Enter your choice: ");
                     int choice4 = sc.nextInt();
                     sc.nextLine();
@@ -202,14 +234,12 @@ public class Main {
                             String email = sc.nextLine();
                             Member m = memberService.findMemberByEmail(email);
                             System.out.println(m != null ? m : "Member not found");
-                        }case 5 ->{
+                        }case 5 -> {
                             System.out.print("Enter member phone number: ");
                             String phone = sc.nextLine();
                             Member m = memberService.findMemberByPhone(phone);
                             System.out.println(m != null ? m : "Member not found");
-                        }case 6->{
-
-                        }case 7 ->{
+                        }case 6 ->{
                             Member m = new Member();
 
                             System.out.print("Member ID: ");
@@ -234,12 +264,12 @@ public class Main {
                             memberService.updateMember(m);
                             System.out.println("Member updated successfully");
 
-                        }case 8->{
+                        }case 7->{
                             System.out.print("Member ID: ");
                             int id = sc.nextInt();
                             bookingService.getBookingsByMember(id)
                                     .forEach(System.out::println);
-                        }case 9 ->{
+                        }case 8 ->{
                             return;
                         }default -> System.out.println("Unknown command");
                     }
@@ -250,6 +280,11 @@ public class Main {
         }
     }
     void main(){
+        try (Connection c = DatabaseConnection.getConnection()) {
+            System.out.println("CONNECTED TO SUPABASE ");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         DataBaseCreation.init();
         new Main().run();
     }

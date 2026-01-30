@@ -23,11 +23,6 @@ public class Member {
         setGender(gender);
         setEmail(email);
     }
-    public void setMembership(MembershipType type) {
-        this.membershipType = type;
-        this.membershipEndDate = LocalDate.now()
-                .plusDays(type.getDurationDays());
-    }
 
     public boolean isExpired() {
         return membershipEndDate == null || membershipEndDate.isBefore(LocalDate.now());
