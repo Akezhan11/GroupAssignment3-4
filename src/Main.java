@@ -275,13 +275,15 @@ public class Main {
                     }
                 }case 4 -> {
                     bookingService.getAllBookings().forEach(System.out::println);
+                }case 5->{
+                    return;
                 }default -> System.out.println("Unknown command");
             }
         }
     }
     void main(){
         try (Connection c = DatabaseConnection.getConnection()) {
-            System.out.println("CONNECTED TO SUPABASE ");
+            System.out.println("CONNECTED TO SUPABASE");
         } catch (Exception e) {
             e.printStackTrace();
         }
