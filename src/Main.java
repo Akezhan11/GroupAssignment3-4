@@ -1,6 +1,7 @@
 import edu.aitu.oop3.db.*;
 import entities.FitnessClass;
 import entities.Member;
+import entities.MembershipType;
 import repositories.MemberRepository;
 import service.BookingService;
 import service.FitnessClassService;
@@ -18,117 +19,233 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         DbFitnessClassRepository fitnessRepo = new DbFitnessClassRepository();
         DbClassBookingRepository bookingRepo = new DbClassBookingRepository();
+        DbMemberRepository memberRepo = new DbMemberRepository();
 
         FitnessClassService fitnessService = new FitnessClassService(fitnessRepo);
         BookingService bookingService = new BookingService(bookingRepo);
+        MemberService memberService = new MemberService(memberRepo);
 
         Member member = new Member();
         while (true){
             System.out.println("Fitness application");
             System.out.println("Menu");
-            System.out.println("1: Show all fitness classes");
-            System.out.println("2: Find fitness class by type");
-            System.out.println("3: Find fitness class by id");
-            System.out.println("4: Find classes by trainer name");
-            System.out.println("5: Find classes by cost");
-            System.out.println("6: Book fitness class");
-            System.out.println("7: Cancel booking");
-            System.out.println("8: Show bookings by fitness class");
-            System.out.println("9: Add new fitness class");
-            System.out.println("10: Exit");
-
+            System.out.println("1: Fitness classes");
+            System.out.println("2: Membership");
+            System.out.println("3: Members");
+            System.out.println("4: Show all Bookings");
+            System.out.println("5: Exit");
             System.out.print("Enter your choice: ");
             int choice = sc.nextInt();
             sc.nextLine();
-
             switch(choice){
-                case 1 -> {
-                    List<FitnessClass> classes = fitnessService.getAll();
-                    classes.forEach(System.out::println);
-                }
+                case 1->{
+                    System.out.println("1: Show all fitness classes");
+                    System.out.println("2: Find fitness class by type");
+                    System.out.println("3: Find fitness class by id");
+                    System.out.println("4: Find classes by trainer name");
+                    System.out.println("5: Find classes by cost");
+                    System.out.println("6: Book fitness class");
+                    System.out.println("7: Cancel booking");
+                    System.out.println("8: Show bookings by fitness class");
+                    System.out.println("9: Add new fitness class");
+                    System.out.println("10: Exit");
 
-                case 2 -> {
-                    System.out.print("Enter class ID: ");
-                    int id = sc.nextInt();
-                    FitnessClass fc = fitnessService.getById(id);
-                    System.out.println(fc != null ? fc : "Not found");
-                }
-
-                case 3 -> {
-                    System.out.print("Trainer name: ");
-                    String name = sc.nextLine();
-                    fitnessService.getByTrainerName(name)
-                            .forEach(System.out::println);
-                }
-
-                case 4 -> {
-                    System.out.print("Cost: ");
-                    int cost = sc.nextInt();
-                    fitnessService.getByCost(cost)
-                            .forEach(System.out::println);
-                }
-
-                case 5 -> {
-                    System.out.print("Class ID to book: ");
-                    int id = sc.nextInt();
-                    FitnessClass fc = fitnessService.getById(id);
-                    bookingService.bookClass(member, fc);
-                    System.out.println("Booked successfully");
-                }
-
-                case 6 -> {
-                    System.out.print("Class ID to cancel: ");
-                    int id = sc.nextInt();
-                    FitnessClass fc = fitnessService.getById(id);
-                    bookingService.cancelBooking(member, fc);
-                    System.out.println("Booking cancelled");
-                }
-
-                case 7 -> {
-                    System.out.print("Fitness class ID: ");
-                    int id = sc.nextInt();
-                    bookingService.getBookingsByFitness(id)
-                            .forEach(System.out::println);
-                }
-
-                case 8 -> {
-                    FitnessClass fc = new FitnessClass();
-
-                    System.out.print("Type: ");
-                    fc.setFitnessType(sc.nextLine());
-
-                    System.out.print("Description: ");
-                    fc.setFitnessDescription(sc.nextLine());
-
-                    System.out.print("Date: ");
-                    fc.setFitnessDate(sc.nextLine());
-
-                    System.out.print("Time: ");
-                    fc.setFitnessTime(sc.nextLine());
-
-                    System.out.print("Cost: ");
-                    fc.setFitnessCost(sc.nextInt());
+                    System.out.print("Enter your choice: ");
+                    int choice2 = sc.nextInt();
                     sc.nextLine();
 
-                    System.out.print("Trainer name: ");
-                    fc.setFitnessTrainerName(sc.nextLine());
+                    switch(choice2){
+                        case 1 -> {
+                            List<FitnessClass> classes = fitnessService.getAll();
+                            classes.forEach(System.out::println);
+                        }
 
-                    System.out.print("Trainer surname: ");
-                    fc.setFitnessTrainerSurname(sc.nextLine());
+                        case 2 -> {
+                            System.out.print("Enter class type: ");
+                            String type = sc.nextLine();
+                            FitnessClass fc = fitnessService.findByType(type);
+                            System.out.println(fc != null ? fc : "Not found");
+                        }
 
-                    System.out.print("Max places: ");
-                    fc.setMaxPlaces(sc.nextInt());
+                        case 3 -> {
+                            System.out.print("Enter class id: ");
+                            int id = sc.nextInt();
+                            FitnessClass fc = fitnessService.findById(id);
+                            System.out.println(fc != null ? fc : "Not found");
+                        }
 
-                    fitnessService.create(fc);
-                    System.out.println("Fitness class added");
+                        case 4 -> {
+                            System.out.print("Enter trainer name: ");
+                            String trainerName = sc.nextLine();
+                            System.out.print("Enter trainer surname: ");
+                            String trainerSurname = sc.nextLine();
+                            fitnessService.getByTrainerName(trainerName, trainerSurname);
+                        }
+                        case 5 -> {
+                            System.out.print("Enter cost of the class: ");
+                            int cost = sc.nextInt();
+                            List<FitnessClass> fc = fitnessService.getByCost(cost);
+                            System.out.println(fc != null ? fc : "Not found");
+                        }
+
+                        case 6 -> {
+                            System.out.print("Class ID to book: ");
+                            int id = sc.nextInt();
+                            FitnessClass fc = fitnessService.findById(id);
+                            bookingService.bookClass(member, fc);
+                            System.out.println("Booked successfully");
+                        }
+
+                        case 7 -> {
+                            System.out.print("Class ID to cancel: ");
+                            int id = sc.nextInt();
+                            FitnessClass fc = fitnessService.findById(id);
+                            bookingService.cancelBooking(member, fc);
+                            System.out.println("Booking cancelled");
+                        }
+
+                        case  8-> {
+                            System.out.print("Fitness class ID: ");
+                            int id = sc.nextInt();
+                            bookingService.getBookingsByFitness(id)
+                                    .forEach(System.out::println);
+                        }
+
+                        case  9-> {
+                            FitnessClass fc = new FitnessClass();
+
+                            System.out.print("Type: ");
+                            fc.setFitnessType(sc.nextLine());
+
+                            System.out.print("Description: ");
+                            fc.setFitnessDescription(sc.nextLine());
+
+                            System.out.print("Date: ");
+                            fc.setFitnessDate(sc.nextLine());
+
+                            System.out.print("Time: ");
+                            fc.setFitnessTime(sc.nextLine());
+
+                            System.out.print("Cost: ");
+                            fc.setFitnessCost(sc.nextInt());
+                            sc.nextLine();
+
+                            System.out.print("Trainer name: ");
+                            fc.setFitnessTrainerName(sc.nextLine());
+
+                            System.out.print("Trainer surname: ");
+                            fc.setFitnessTrainerSurname(sc.nextLine());
+
+                            System.out.print("Max places: ");
+                            fc.setMaxPlaces(sc.nextInt());
+
+                            fitnessService.addFitnessClass(fc);
+                            System.out.println("Fitness class added");
+                        }
+                        case 10 -> {
+                            System.out.println("Closing the program");
+                            return;
+                        }
+
+                        default -> System.out.println("Unknown command");
+                    }
                 }
-                case 9 -> main();
-                case 10 -> {
-                    System.out.println("Closing the program");
-                    return;
-                }
+                case 2 -> {
+                    System.out.println("Membership types:");
+                    System.out.println("1: Basic");
+                    System.out.println("2: Premium");
+                    System.out.println("3: Platinum");
+                    System.out.print("Enter your choice: ");
+                    int choice3 = sc.nextInt();
+                    sc.nextLine();
+                    switch(choice3){
 
-                default -> System.out.println("Unknown command");
+                    }
+                }
+                case 3 -> {
+                    System.out.println("1: Add member");
+                    System.out.println("2: Show all members");
+                    System.out.println("3: Find member by id");
+                    System.out.println("4: Find member by email");
+                    System.out.println("5: Find member by phone");
+                    System.out.println("6: Find all members by membership type");
+                    System.out.println("7: Update member");
+                    System.out.println("8: Get bookings by member id");
+                    System.out.println("9: Exit");
+                    System.out.print("Enter your choice: ");
+                    int choice4 = sc.nextInt();
+                    sc.nextLine();
+                    switch(choice4){
+                        case 1 -> {
+                            Member m = new Member();
+                            System.out.print("Name: ");
+                            m.setName(sc.nextLine());
+                            System.out.print("Surname: ");
+                            m.setSurname(sc.nextLine());
+                            System.out.print("Phone number: ");
+                            m.setPhoneNumber(sc.nextLine());
+                            System.out.print("Email: ");
+                            m.setEmail(sc.nextLine());
+                            System.out.print("Gender: ");
+                            m.setGender(sc.nextLine());
+                            memberService.addMember(m);
+                        }case 2->{
+                            List<Member> members = memberService.findAllMembers();
+                            members.forEach(System.out::println);
+                        }case 3->{
+                            System.out.print("Enter member id: ");
+                            int id = sc.nextInt();
+                            Member m = memberService.findMemberByid(id);
+                            System.out.println(m != null ? m : "Member not found");
+                        }case 4->{
+                            System.out.print("Enter member email: ");
+                            String email = sc.nextLine();
+                            Member m = memberService.findMemberByEmail(email);
+                            System.out.println(m != null ? m : "Member not found");
+                        }case 5 ->{
+                            System.out.print("Enter member phone number: ");
+                            String phone = sc.nextLine();
+                            Member m = memberService.findMemberByPhone(phone);
+                            System.out.println(m != null ? m : "Member not found");
+                        }case 6->{
+
+                        }case 7 ->{
+                            Member m = new Member();
+
+                            System.out.print("Member ID: ");
+                            m.setId(sc.nextInt());
+                            sc.nextLine();
+
+                            System.out.print("Name: ");
+                            m.setName(sc.nextLine());
+
+                            System.out.print("Surname: ");
+                            m.setSurname(sc.nextLine());
+
+                            System.out.print("Phone: ");
+                            m.setPhoneNumber(sc.nextLine());
+
+                            System.out.print("Email: ");
+                            m.setEmail(sc.nextLine());
+
+                            System.out.print("Gender: ");
+                            m.setGender(sc.nextLine());
+
+                            memberService.updateMember(m);
+                            System.out.println("Member updated successfully");
+
+                        }case 8->{
+                            System.out.print("Member ID: ");
+                            int id = sc.nextInt();
+                            bookingService.getBookingsByMember(id)
+                                    .forEach(System.out::println);
+                        }case 9 ->{
+                            return;
+                        }default -> System.out.println("Unknown command");
+                    }
+                }case 4 -> {
+                    bookingService.getAllBookings().forEach(System.out::println);
+                }default -> System.out.println("Unknown command");
             }
         }
     }

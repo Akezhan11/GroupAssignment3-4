@@ -48,6 +48,25 @@ public class DataBaseCreation {
                 """;
         execute(sql);
     }
+    private static void membershipTable(){
+        String sql = """
+                CREATE TABLE memberships (
+                    id SERIAL PRIMARY KEY,
+                    member_id INT NOT NULL UNIQUE,
+                    type VARCHAR(50) NOT NULL,
+                    start_date DATE NOT NULL,
+                    end_date DATE NOT NULL,
+                    active BOOLEAN NOT NULL,
+                
+                    CONSTRAINT fk_member
+                        FOREIGN KEY (member_id)
+                        REFERENCES members(id)
+                        ON DELETE CASCADE
+                );
+                
+                """;
+        execute(sql);
+    }
 
     private static void execute(String sql) {
         try(Connection con = DatabaseConnection.getConnection(); Statement stmt = con.createStatement();) {

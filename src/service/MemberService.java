@@ -22,6 +22,18 @@ public class MemberService {
         }
         memberRepository.save(member);
     }
+    public void updateMember(Member member) {
+
+        if (member.getId() <= 0) {
+            throw new IllegalArgumentException("Invalid member id");
+        }
+
+        if (member.getEmail() == null || member.getEmail().isBlank()) {
+            throw new IllegalArgumentException("Email cannot be empty");
+        }
+
+        memberRepository.update(member);
+    }
 
     public Member findMemberByid(int id) {
         Member m = memberRepository.findById(id);
@@ -45,7 +57,7 @@ public class MemberService {
         }
         return m;
     }
-    List<Member> findAllMembers(){
+    public List<Member> findAllMembers(){
         return memberRepository.findAll();
     }
 

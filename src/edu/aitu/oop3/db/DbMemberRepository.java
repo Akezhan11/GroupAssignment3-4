@@ -90,6 +90,27 @@ public class DbMemberRepository implements MemberRepository{
         }
     }
     @Override
+    public void update(Member member) {
+        String sql = """
+                UPDATE members SET name=?, surname=?, phone=?, email=?, gender=? WHERE id=?
+                """;
+        try(Connection con = DatabaseConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)){
+            ps.setString(1,member.getName());
+            ps.setString(2,member.getSurname());
+            ps.setString(3,member.getPhoneNumber());
+            ps.setString(4,member.getEmail());
+            ps.setString(5,member.getGender());
+            ps.setInt(6,member.getId());
+            int rows = ps.executeUpdate();
+            if (rows == 0) {
+                throw new RuntimeException("Member with id " + member.getId() + " not found");
+            }
+
+        }catch(Exception e){
+            throw new RuntimeException("Error updating member ", e);
+        }
+    }
+    @Override
     public List<Member> findAll(){
         String sql = """
                 SELECT * FROM members;

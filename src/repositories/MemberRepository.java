@@ -8,4 +8,5 @@ public interface MemberRepository{
     Member findByPhone(String phoneNumber);
     Member findByEmail(String email);
     List<Member> findAll();
+    void update(Member member);
 }
